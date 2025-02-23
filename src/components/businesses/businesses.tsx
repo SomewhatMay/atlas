@@ -11,7 +11,7 @@ export type BusinessOverviewInfo = {
   image: string;
 };
 
-type BusinessDetailedInfo = {
+export type BusinessDetailedInfo = {
   id: number;
   name: string;
   type: string;
@@ -19,39 +19,43 @@ type BusinessDetailedInfo = {
   image: string;
 
   website: string;
-  description: string;
+  business_url: string;
   phone: string;
 };
 
-export default function Businesses() {
-  const testing = true;
-  const [businesses, setBusinesses] = useState<BusinessDetailedInfo[]>([]);
+type BusinessesProps = {
+  setSelectedBusiness: (id: number) => void;
+  setBusinesses: (businesses: BusinessDetailedInfo[]) => void;
+  businesses: BusinessOverviewInfo[];
+};
+
+export default function Businesses({
+  setSelectedBusiness,
+  setBusinesses,
+  businesses,
+}: BusinessesProps) {
+  const testing = false;
+
   const [attempt, setAttempt] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!testing) {
-      // fetch("http://127.0.0.1:5000/api/businesses")
-      //   .then((response) => response.json())
-      //   .then((data: BusinessDetailedInfo[]) => setBusinesses(data))
-      //   .catch((error) => {
-      //     console.log("Error:", error);
-      //   });
+    async function fetchData() {
+      fetch("https://bitsandbitesvercel.vercel.app/api/send_scraped_json")
+        .then((response) => response.json())
+        .then((data: BusinessDetailedInfo[]) => {
+          console.log(data);
+          setBusinesses(data);
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.log("Error:", error);
+          setLoading(false);
+        });
     }
 
-    async function fetchHello() {
-      try {
-        fetch("https://bitsandbitesvercel.vercel.app/api/hello", {
-          mode: "cors",
-        })
-          .then((response: any) => {
-            console.log(response);
-          })
-          .catch((error) => {
-            console.log("Error:", error);
-          });
-      } catch (error) {
-        console.log(error);
-      }
+    if (!testing) {
+      fetchData();
     }
   }, [attempt]);
 
@@ -62,10 +66,11 @@ export default function Businesses() {
         <hr />
       </div>
       {/* Businesses Grid */}
-      {testing && (
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 auto-rows-fr mt-6 px-6">
-          {Array.from({ length: 8 }).map((_, index) => (
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-6 auto-rows-fr mt-6 px-6">
+        {testing &&
+          Array.from({ length: 8 }).map((_, index) => (
             <BusinessCard
+              setSelectedBusiness={setSelectedBusiness}
               id={index}
               key={index}
               name="Test Restaurant"
@@ -74,12 +79,11 @@ export default function Businesses() {
               image="https://i.ibb.co/ZRw1G4B6/360-F-345059232-CPie-T8-RIWOUk4-Jq-Bkk-Wk-IETYAkmz2b75.webp"
             />
           ))}
-        </div>
-      )}
-      {!testing && businesses.length !== 0 && (
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 auto-rows-fr mt-6 px-6">
-          {businesses.map((business) => (
+        {!testing &&
+          businesses.length !== 0 &&
+          businesses.map((business) => (
             <BusinessCard
+              setSelectedBusiness={setSelectedBusiness}
               id={business.id}
               key={business.id}
               name={business.name}
@@ -88,19 +92,44 @@ export default function Businesses() {
               image={business.image}
             />
           ))}
-        </div>
-      )}
-      {!testing && businesses.length === 0 && (
-        <div className="text-center text-lg mt-6 flex flex-col justify-center items-center">
-          <span>Unable to load businesses!</span>
-          <button
-            onClick={() => setAttempt(attempt + 1)}
-            className="py-1 px-3 mt-4 border rounded-lg b-2 max-w-[200px] transition-all hover:bg-white hover:text-black hover:scale-110"
-          >
-            Try Again
-          </button>
-        </div>
-      )}
+        {!testing && businesses.length === 0 && !loading && (
+          <div className="text-center text-lg mt-6 flex flex-col justify-center items-center">
+            <span>Unable to load businesses!</span>
+            <button
+              onClick={() => setAttempt(attempt + 1)}
+              className="py-1 px-3 mt-4 border rounded-lg b-2 max-w-[200px] transition-all hover:bg-white hover:text-black hover:scale-110"
+            >
+              Try Again
+            </button>
+          </div>
+        )}
+        {loading && (
+          <div className="text-center text-lg mt-6 flex flex-col justify-center items-center">
+            <svg
+              className="animate-spin h-5 w-5 text-white mb-4"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              ></circle>
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+              ></path>
+            </svg>
+
+            <span>Loading Businesses...</span>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
