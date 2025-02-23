@@ -66,7 +66,7 @@ export default function Businesses({
         <hr />
       </div>
       {/* Businesses Grid */}
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-6 auto-rows-fr mt-6 px-6">
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-6 grid-rows-[auto,auto,auto] mt-6 px-6">
         {testing &&
           Array.from({ length: 8 }).map((_, index) => (
             <BusinessCard
