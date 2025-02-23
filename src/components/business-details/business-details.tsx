@@ -67,10 +67,12 @@ export default function BusinessDetails({
             (item, index) =>
               item[1] !== "none" && (
                 <div
-                  className="bg-neutral-800 rounded-lg p-2 px-4 max-h-max"
+                  className="bg-neutral-800 rounded-lg p-2 px-4 flex items-center justify-center"
                   key={index}
                 >
-                  {item[0]}: {item[1]}
+                  <span>
+                    {item[0]}: {item[1]}
+                  </span>
                 </div>
               )
           )}

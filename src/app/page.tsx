@@ -37,13 +37,11 @@ export default function Home() {
         <div className="flex flex-col gap-1 text-left">
           <Link
             className="underline"
-            href="https://github.com/SomewhatMay/Bits-and-Bites"
+            href="https://github.com/SomewhatMay/atlas"
           >
             GitHub
           </Link>
-          <Link href="https://github.com/SomewhatMay/Bits-and-Bites">
-            <span className="underline">Backend</span> with Vercel and Flask.py
-          </Link>
+          <div>Built with Next.js, Vercel and ❤️</div>
         </div>
       </footer>
     </div>
