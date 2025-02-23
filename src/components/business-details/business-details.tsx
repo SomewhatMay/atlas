@@ -59,7 +59,7 @@ export default function BusinessDetails({
         </div>
         <h1 className="text-3xl font-bold mt-5">{name}</h1>
         {type !== "none" && <p className="mt-1 font-normal">{type}</p>}
-        <div className="grid grid-cols-2 gap-4 text-center mt-4">
+        <div className="grid grid-rows-2 sm:grid-cols-2 gap-4 text-center mt-4">
           {[
             ["Address", address],
             ["Phone", phone],
