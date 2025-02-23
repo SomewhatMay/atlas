@@ -30,12 +30,28 @@ export default function Businesses() {
 
   useEffect(() => {
     if (!testing) {
-      fetch("http://127.0.0.1:5000/api/businesses")
-        .then((response) => response.json())
-        .then((data: BusinessDetailedInfo[]) => setBusinesses(data))
-        .catch((error) => {
-          console.log("Error:", error);
-        });
+      // fetch("http://127.0.0.1:5000/api/businesses")
+      //   .then((response) => response.json())
+      //   .then((data: BusinessDetailedInfo[]) => setBusinesses(data))
+      //   .catch((error) => {
+      //     console.log("Error:", error);
+      //   });
+    }
+
+    async function fetchHello() {
+      try {
+        fetch("https://bitsandbitesvercel.vercel.app/api/hello", {
+          mode: "cors",
+        })
+          .then((response: any) => {
+            console.log(response);
+          })
+          .catch((error) => {
+            console.log("Error:", error);
+          });
+      } catch (error) {
+        console.log(error);
+      }
     }
   }, [attempt]);
 
@@ -47,7 +63,7 @@ export default function Businesses() {
       </div>
       {/* Businesses Grid */}
       {testing && (
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 auto-rows-fr mt-6 px-6">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 auto-rows-fr mt-6 px-6">
           {Array.from({ length: 8 }).map((_, index) => (
             <BusinessCard
               id={index}
